@@ -3,11 +3,19 @@ import pandas as pd
 def deep_get(obj, key):
     temp = obj
     for bit in key.split('.'):
+        bit = bit.replace('|', '')
         try:
             temp = temp[bit]
         except:
             return None
     return temp
+
+def process_name(name):
+    left = name.find('|')
+    if left != -1:
+        right = name.find('|', left + 1)
+        return name[left+1:right]
+    return name.replace('.', '_')
 
 def obj_to_frame(objs, columns):
     data = {}
@@ -19,6 +27,6 @@ def obj_to_frame(objs, columns):
             arr = data[col]
             arr.append(deep_get(obj, col))
 
-    data = {k.replace('.', '_'): v for k, v in data.items()}
-    columns = [col.replace('.', '_') for col in columns]
+    data = {process_name(k): v for k, v in data.items()}
+    columns = [process_name(col) for col in columns]
     return pd.DataFrame(data, columns=columns)
