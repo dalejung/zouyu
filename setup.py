@@ -9,4 +9,4 @@ setup(
     packages=['zouyu'],
     entry_points={
     }
-      )
+)
